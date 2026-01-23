@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZyroX Mods - Premium UI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #0d0d0d; color: #fff; overflow-x: hidden; }
+        .container { max-width: 500px; margin: auto; padding: 0 15px; }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-card { animation: fadeInUp 0.5s ease-out forwards; }
+
+        /* SIDEBAR STYLES */
+        #sidebar {
+            position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
+            background: #111; z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 1px solid #222; box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+        }
+        #sidebar.active { left: 0; }
+        #sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none; z-index: 999; backdrop-filter: blur(3px);
+        }
+        .sidebar-header {
+            padding: 40px 20px; background: linear-gradient(45deg, #1a1a1a, #0d0d0d);
+            border-bottom: 1px solid #222; display: flex; align-items: center; gap: 15px;
+        }
+        .user-avatar { width: 55px; height: 55px; border-radius: 18px; border: 2px solid #007bff; }
+        .sidebar-menu { padding: 20px 10px; }
+        .menu-item {
+            display: flex; align-items: center; gap: 15px; padding: 15px;
+            color: #bbb; text-decoration: none; font-size: 14px; border-radius: 12px; transition: 0.3s;
+        }
+        .menu-item i { width: 20px; color: #007bff; font-size: 18px; }
+        .menu-item:hover { background: rgba(255, 51, 102, 0.1); color: #fff; }
+
+        /* HEADER */
+        header { padding: 20px 0; }
+        .nav-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .logo-text { color: #007bff; font-size: 26px; font-weight: 800; letter-spacing: 1px; }
+        #menu-toggle { font-size: 22px; color: #007bff; cursor: pointer; }
+        
+        .search-bar { 
+            background: #1a1a1a; display: flex; align-items: center; padding: 12px 18px; 
+            border-radius: 16px; border: 1px solid #222; 
+        }
+        .search-bar input { background: transparent; border: none; color: white; margin-left: 12px; width: 100%; outline: none; }
+
+        /* SECTIONS */
+        .section-header { display: flex; align-items: center; margin: 30px 0 15px 0; }
+        .pink-accent { width: 5px; height: 22px; background: #007bff; margin-right: 12px; border-radius: 10px; }
+        h2 { font-size: 18px; font-weight: 600; }
+
+        /* RECOMMENDED */
+        .scroll-wrapper { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; padding-bottom: 10px; }
+        .scroll-wrapper::-webkit-scrollbar { display: none; }
+        .rec-card-link { flex: 0 0 85%; text-decoration: none; color: inherit; }
+        .rec-card { position: relative; height: 170px; border-radius: 28px; overflow: hidden; background: #1a1a1a; }
+        .rec-card img.bg { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
+        .card-info { position: absolute; bottom: 18px; left: 18px; display: flex; align-items: center; gap: 12px; }
+        .game-icon { width: 52px; height: 52px; border-radius: 14px; }
+        .rec-tag { background: #007bff; color: white; font-size: 10px; padding: 4px 14px; border-radius: 20px; font-weight: 600; }
+
+        /* GRID */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-link { text-decoration: none; color: inherit; }
+        .card { 
+            background: #151515; border-radius: 24px; overflow: hidden; padding-bottom: 15px; 
+            border: 1px solid #222; border-bottom: 3.5px solid #007bff; transition: 0.3s;
+        }
+        .card:active { transform: scale(0.95); }
+        .thumb-wrap { position: relative; height: 130px; }
+        .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .u-label { position: absolute; top: 0; font-size: 9px; font-weight: bold; padding: 5px 12px; text-transform: uppercase; }
+        .u-new { left: 0; background: #00ff00; color: #000; border-bottom-right-radius: 12px; }
+        .u-mod { right: 0; background: #007bff; color: #fff; border-bottom-left-radius: 12px; }
+        .p-10 { padding: 12px; }
+        h4 { font-size: 14px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ver { font-size: 11px; color: #666; margin-bottom: 10px; display: block; }
+        .grid-badge { background: rgba(255, 51, 102, 0.1); color: #007bff; font-size: 10px; padding: 4px 12px; border-radius: 10px; font-weight: 600; }
+
+        /* FOOTER */
+        footer { margin-top: 50px; padding: 10px 0; text-align: center; background: #0a0a0a; border-top: 1px solid #1a1a1a; }
+        .social-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .social-circle {
+            width: 45px; height: 45px; border-radius: 50%; background: #1a1a1a;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid #222; color: #fff; text-decoration: none; font-size: 20px; transition: 0.3s;
+        }
+        .social-circle:hover { border-color: #007bff; color: #007bff; transform: translateY(-5px); }
+        .copy-text { font-size: 11px; color: #444; letter-spacing: 1px; }
+
+        /* MODAL OVERLAY STYLE */
+        #newUpdateOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0d0d0d; z-index: 2000; display: none; overflow-y: auto;
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 15px; border-bottom: 1px solid #222; margin-bottom: 20px;
+        }
+        .close-btn { font-size: 24px; color: #007bff; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar-overlay"></div>
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <img src="https://via.placeholder.com/60/ff3366/fff?text=Z" class="user-avatar">
+            <div><h3>ZyroX Mods</h3><p>Premium Modder</p></div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="index.html" class="menu-item"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="https://t.me/ZyroXMods" class="menu-item"><i class="fa-brands fa-telegram"></i> Telegram</a>
+            <a href="https://youtube.com/@zyroxmods" class="menu-item"><i class="fa-brands fa-youtube"></i> YouTube</a>
+            <a href="https://www.instagram.com/a_j_a_y_a_c_h_e_t_t_r_i?igsh=cDRvbXc4bzd0NTUy" class="menu-item"><i class="fa-brands fa-instagram"></i> Instagram</a>
+            <a href="#" class="menu-item"><i class="fa-solid fa-share-nodes"></i> Share App</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="nav-top">
+                <div class="logo-text">ZyroX Mods</div>
+                <div id="menu-toggle"><i class="fa-solid fa-bars-staggered"></i></div>
+            </div>
+            <div class="search-bar">
+                <span>🔍</span>
+                <input type="text" id="searchInput" placeholder="Search mods..." onkeyup="globalSearch()">
+            </div>
+        </header>
+
+        <div id="recommended-area">
+            <div class="section-header"><div class="pink-accent"></div><h2>Recommended Mods</h2></div>
+            <div class="scroll-wrapper">
+                <a href="Details.html?id=frag" class="rec-card-link">
+                    <div class="rec-card">
+                        <img src="fragb.png" class="bg">
+                        <div class="card-info"><img src="frag.png" class="game-icon"><div><h3>Frag Pro Shooter</h3><span class="rec-tag">Action</span></div></div>
+                    </div>
+                </a>
+                <a href="Details.html?id=stick" class="rec-card-link">
+                    <div class="rec-card">
+                        <img src="stick.png" class="bg">
+                        <div class="card-info"><img src="stick.png" class="game-icon"><div><h3>Stick War Legacy</h3><span class="rec-tag">Strategy</span></div></div>
+                    </div>
+                </a>
+                <a href="Details.html?id=super" class="rec-card-link">
+                    <div class="rec-card">
+                        <img src="super.png" class="bg">
+                        <div class="card-info"><img src="super.png" class="game-icon"><div><h3>Super Bear</h3><span class="rec-tag">Adventure</span></div></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="section-header" onclick="openModal()" style="cursor: pointer;">
+            <div class="pink-accent"></div>
+            <h2 id="grid-title">New Update <i class="fa-solid fa-chevron-right" style="font-size: 14px; margin-left: 5px; color: #007bff;"></i></h2>
+        </div>
+
+        <div class="grid" id="appsGrid">
+            <a href="Details.html?id=frag" class="grid-link animate-card search-item" data-name="frag pro shooter" style="display:none;">
+                <div class="card"><div class="thumb-wrap"><img src="frag.png"></div><div class="p-10"><h4>Frag Pro Shooter</h4><span class="grid-badge">Action</span></div></div>
+            </a>
+            <a href="Details.html?id=stick" class="grid-link animate-card search-item" data-name="stick war legacy" style="display:none;">
+                <div class="card"><div class="thumb-wrap"><img src="stick.png"></div><div class="p-10"><h4>Stick War Legacy</h4><span class="grid-badge">Strategy</span></div></div>
+            </a>
+            <a href="Details.html?id=super" class="grid-link animate-card search-item" data-name="super bear" style="display:none;">
+                <div class="card"><div class="thumb-wrap"><img src="super.png"></div><div class="p-10"><h4>Super Bear</h4><span class="grid-badge">Adventure</span></div></div>
+            </a>
+            <a href="Details.html?id=fr" class="grid-link animate-card search-item" data-name="fr legends">
+                <div class="card"><div class="thumb-wrap"><img src="fr.png"><span class="u-label u-new">NEW</span><span class="u-label u-mod">MOD</span></div><div class="p-10"><h4>FR Legends</h4><span class="ver">v0.3.4</span><span class="grid-badge">Racing</span></div></div>
+            </a>
+            <a href="Details.html?id=manok" class="grid-link animate-card search-item" data-name="manok na pula">
+                <div class="card"><div class="thumb-wrap"><img src="manok.png"><span class="u-label u-mod">MOD</span></div><div class="p-10"><h4>Manok Na Pula</h4><span class="ver">v6.8.0</span><span class="grid-badge">Action</span></div></div>
+            </a>
+            <a href="Details.html?id=mob" class="grid-link animate-card search-item" data-name="mob control">
+                <div class="card"><div class="thumb-wrap"><img src="mob.png"><span class="u-label u-mod">MOD</span></div><div class="p-10"><h4>Mob Control</h4><span class="ver">v2.5.1</span><span class="grid-badge">Arcade</span></div></div>
+            </a>
+            <a href="Details.html?id=bowmasters" class="grid-link animate-card search-item" data-name="bowmasters">
+                <div class="card"><div class="thumb-wrap"><img src="bow.png"></div><div class="p-10"><h4>Bowmasters</h4><span class="ver">v5.0.2</span><span class="grid-badge">Action</span></div></div>
+            </a>
+        </div>
+    </div>
+
+    <div id="newUpdateOverlay">
+        <div class="container">
+            <div class="modal-header">
+                <h2>New Updates</h2>
+                <div class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <div class="grid">
+                 <a href="Details.html?id=frag" class="grid-link animate-card">
+                    <div class="card"><div class="thumb-wrap"><img src="frag.png"></div><div class="p-10"><h4>Frag Pro Shooter</h4><span class="grid-badge">Action</span></div></div>
+                </a>
+                <a href="Details.html?id=stick" class="grid-link animate-card">
+                    <div class="card"><div class="thumb-wrap"><img src="stick.png"></div><div class="p-10"><h4>Stick War Legacy</h4><span class="grid-badge">Strategy</span></div></div>
+                </a>
+                <a href="Details.html?id=fr" class="grid-link animate-card">
+                    <div class="card"><div class="thumb-wrap"><img src="fr.png"></div><div class="p-10"><h4>FR Legends</h4><span class="grid-badge">Racing</span></div></div>
+                </a>
+                <a href="Details.html?id=manok" class="grid-link animate-card">
+                    <div class="card"><div class="thumb-wrap"><img src="manok.png"></div><div class="p-10"><h4>Manok Na Pula</h4><span class="grid-badge">Action</span></div></div>
+                </a>
+                </div>
+            <div style="height: 50px;"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="social-row">
+            <a href="https://youtube.com/@zyroxmods" class="social-circle"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://t.me/ZyroXMods" class="social-circle"><i class="fa-brands fa-telegram"></i></a>
+            <a href="https://www.instagram.com/a_j_a_y_a_c_h_e_t_t_r_i?igsh=cDRvbXc4bzd0NTUy" class="social-circle"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+        <p class="copy-text">© 2026 ZYROX MODS PREMIUM</p>
+    </footer>
+
+    <script>
+        const menuBtn = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        menuBtn.onclick = () => { sidebar.classList.add('active'); overlay.style.display = 'block'; };
+        overlay.onclick = () => { sidebar.classList.remove('active'); overlay.style.display = 'none'; };
+
+        // Modal Functions
+        function openModal() {
+            document.getElementById('newUpdateOverlay').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Main page scroll banda garne
+        }
+        function closeModal() {
+            document.getElementById('newUpdateOverlay').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Main page scroll kholne
+        }
+
+        function globalSearch() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let allSearchItems = document.querySelectorAll('.search-item');
+            let recommendedArea = document.getElementById('recommended-area');
+            let gridTitle = document.getElementById('grid-title');
+
+            if (input.length > 0) {
+                recommendedArea.style.display = "none";
+                gridTitle.innerText = "Found Results";
+                
+                allSearchItems.forEach(item => {
+                    let name = item.getAttribute('data-name').toLowerCase();
+                    if (name.includes(input)) {
+                        item.style.display = "block";
+                    } else {
+                        item.style.display = "none";
+                    }
+                });
+            } else {
+                recommendedArea.style.display = "block";
+                gridTitle.innerText = "New Update";
+                
+                allSearchItems.forEach(item => {
+                    let id = item.getAttribute('href').split('=')[1];
+                    if (id === 'frag' || id === 'stick' || id === 'super') {
+                        item.style.display = "none";
+                    } else {
+                        item.style.display = "block";
+                    }
+                });
+            }
+        }
+        // index.html ko script ma
+document.addEventListener('click', function(e) {
+    // Check garne click card ma vako ho ki nai
+    const targetLink = e.target.closest('.grid-link, .rec-card-link');
+    
+    if (targetLink) {
+        e.preventDefault();
+        const url = targetLink.getAttribute('href');
+        
+        // Random logic: 40% chance for YT
+        if (Math.random() < 0.4) {
+            window.open("https://youtube.com/@zyroxmods", "_blank");
+            // Background ma details page kholne tara history safe rakhera
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        } else {
+            // Direct details page
+            window.location.href = url;
+        }
+    }
+});
+
+    </script>
+</body>
+</html>

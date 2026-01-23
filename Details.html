@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">ZyroX Mods - Premium Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        :root { --pink: #ff3366; --bg: #0d0d0d; --card: #161616; --border: rgba(255, 255, 255, 0.08); --yellow: #facc15; --yt: #ff0000; --tg: #229ED9; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background-color: var(--bg); color: #fff; overflow-x: hidden; }
+
+        /* ANIMATION DEFINITION */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reveal { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+        .top-nav { position: absolute; top: 15px; right: 15px; z-index: 100; }
+        .cancel-btn { width: 38px; height: 38px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; border: 1px solid var(--border); transition: 0.3s; }
+        .cancel-btn:active { transform: scale(0.85); }
+
+        /* BANNER STYLE */
+        .hero-banner { 
+            width: 100%; 
+            height: 220px; 
+            background-size: cover; 
+            background-position: center; 
+            position: relative;
+        }
+
+        .container { max-width: 500px; margin: auto; padding: 0 18px; }
+
+        /* PROFILE & ICON STYLE */
+        .profile-section { margin-top: -70px; text-align: center; position: relative; z-index: 10; }
+        .app-icon { 
+            width: 130px; 
+            height: 130px; 
+            border-radius: 35px; 
+            border: 5px solid var(--bg); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8); 
+            object-fit: cover; 
+        }
+        .mod-label { position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); background: var(--pink); color: #fff; padding: 4px 18px; border-radius: 12px; font-weight: 800; font-size: 10px; }
+        h1 { font-size: 28px; font-weight: 800; margin-top: 15px; }
+
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 22px 0; background: var(--card); padding: 15px; border-radius: 20px; border: 1px solid var(--border); }
+        .info-box { text-align: center; }
+        .info-box i { color: var(--pink); font-size: 14px; margin-bottom: 5px; display: block; }
+        .info-box span { display: block; font-size: 9px; color: #777; text-transform: uppercase; }
+        .info-box p { font-size: 11px; font-weight: 600; }
+
+        .alert-box { background: rgba(255, 51, 102, 0.1); border: 1px solid rgba(255, 51, 102, 0.3); border-radius: 15px; padding: 15px; margin-bottom: 25px; display: flex; gap: 12px; align-items: center; }
+        .alert-box i { color: var(--pink); font-size: 18px; }
+        .alert-box p { font-size: 11.5px; line-height: 1.5; color: #f8fafc; }
+
+        .btn-group { display: flex; gap: 10px; margin-bottom: 12px; }
+        .dl-btn { flex: 1; background: var(--pink); height: 55px; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: #fff; font-weight: 700; transition: 0.3s; box-shadow: 0 10px 20px rgba(255, 51, 102, 0.2); }
+        .help-btn { width: 55px; height: 55px; background: var(--yellow); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: #000; transition: 0.3s; }
+        .dl-btn:active, .help-btn:active { transform: scale(0.95); }
+
+        .social-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 30px; }
+        .s-link { background: var(--card); border: 1px solid var(--border); height: 48px; border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; color: #fff; font-size: 13px; font-weight: 600; transition: 0.3s; }
+        .s-link i.fa-youtube { color: var(--yt); }
+        .s-link i.fa-telegram { color: var(--tg); }
+        .s-link:active { transform: scale(0.95); background: rgba(255,255,255,0.05); }
+
+        .section-title { font-size: 14px; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+        .section-title::before { content: ''; width: 4px; height: 18px; background: var(--pink); border-radius: 2px; }
+
+        .v-card { background: var(--card); border-radius: 22px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 35px; }
+        .v-container { width: 100%; padding-bottom: 56.25%; height: 0; position: relative; }
+        .v-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        /* STEPS SECTION */
+        .step-list { display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px; }
+        .step-item { display: flex; align-items: center; gap: 15px; background: var(--card); padding: 15px; border-radius: 20px; border: 1px solid var(--border); }
+        .step-icon { width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; }
+        .step-text b { font-size: 14px; display: block; color: #fff; }
+        .step-text p { font-size: 11px; color: #777; margin-top: 2px; }
+
+        footer { text-align: center; padding-bottom: 40px; color: #444; font-size: 10px; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav"><a href="index.html" class="cancel-btn"><i class="fa-solid fa-xmark"></i></a></div>
+    
+    <div class="hero-banner reveal" id="banner" style="animation-delay: 0.1s;"></div>
+
+    <div class="container">
+        <div class="profile-section reveal" style="animation-delay: 0.2s;">
+            <div style="position:relative; display:inline-block;">
+                <img src="" class="app-icon" id="icon">
+                <span class="mod-label">MOD</span>
+            </div>
+            <h1 id="title">Loading...</h1>
+        </div>
+
+        <div class="info-grid reveal" style="animation-delay: 0.3s;">
+            <div class="info-box"><i class="fa-solid fa-calendar"></i><span>Updated</span><p id="date">-</p></div>
+            <div class="info-box"><i class="fa-solid fa-code-branch"></i><span>Version</span><p id="version">-</p></div>
+            <div class="info-box"><i class="fa-solid fa-gamepad"></i><span>Genre</span><p id="genre">-</p></div>
+        </div>
+
+        <div class="alert-box reveal" style="animation-delay: 0.4s;">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <p>Please disable <b>Desktop Mode, Ad Blocker or DNS</b> to view the download button.</p>
+        </div>
+
+        <div class="btn-group reveal" style="animation-delay: 0.5s;">
+            <a href="#" class="dl-btn" id="dl-link"><i class="fa-solid fa-download"></i> Download</a>
+            <a href="tutorial.html" class="help-btn"><i class="fa-solid fa-circle-question"></i></a>
+        </div>
+
+        <div class="social-row reveal" style="animation-delay: 0.6s;">
+            <a href="#" class="s-link"><i class="fa-brands fa-youtube"></i> YouTube</a>
+            <a href="#" class="s-link"><i class="fa-brands fa-telegram"></i> Telegram</a>
+            <a href="#" class="s-link"><i class="fa-solid fa-bug"></i> Report</a>
+        </div>
+
+        <div class="section-title reveal" style="animation-delay: 0.7s;">GAMEPLAY PREVIEW</div>
+        <div class="v-card reveal" style="animation-delay: 0.8s;">
+            <div class="v-container">
+                <iframe id="video" src="" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div class="section-title reveal" style="animation-delay: 0.9s;">HOW TO USE?</div>
+        <div class="step-list">
+            <div class="step-item reveal" style="animation-delay: 1.0s;">
+                <div class="step-icon" style="color: var(--pink);"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+                <div class="step-text"><b>Download</b><p>Tap the download button to get the latest APK file.</p></div>
+            </div>
+            <div class="step-item reveal" style="animation-delay: 1.1s;">
+                <div class="step-icon" style="color: var(--yellow);"><i class="fa-solid fa-circle-info"></i></div>
+                <div class="step-text"><b>Tutorial</b><p>Watch the video above for setup and installation guide.</p></div>
+            </div>
+            <div class="step-item reveal" style="animation-delay: 1.2s;">
+                <div class="step-icon" style="color: #00ff7f;"><i class="fa-solid fa-bug"></i></div>
+                <div class="step-text"><b>Report</b><p>Facing issues? Use the report button to let us know.</p></div>
+            </div>
+        </div>
+
+        <footer class="reveal" style="animation-delay: 1.5s;">© 2026 ZYROX MODS • PREMIUM</footer>
+        
+    <script>
+        const gameData = {
+            "frag": { title: "Frag Pro Shooter", ver: "v1.9.5", date: "2026-01-10", genre: "Action", img: "frag.png", bg: "frag-banner.png", vid: "https://www.youtube.com/embed/dQw4w9WgXcQ", dl: "#" },
+            "stick": { title: "Stick War Legacy", ver: "v2025.1", date: "2026-01-05", genre: "Strategy", img: "stick.png", bg: "stick-banner.png", vid: "https://www.youtube.com/embed/dQw4w9WgXcQ", dl: "#" },
+            "super": { title: "Super Bear Adventure", ver: "v10.5", date: "2026-01-08", genre: "Adventure", img: "super.png", bg: "super-banner.png", vid: "https://www.youtube.com/embed/dQw4w9WgXcQ", dl: "#" },
+            "fr": { title: "FR Legends", ver: "v0.3.4", date: "2026-01-01", genre: "Racing", img: "fr.png", bg: "fr-banner.png", vid: "https://www.youtube.com/embed/dQw4w9WgXcQ", dl: "#" },
+            "manok": { title: "Manok Na Pula", ver: "v6.8.0", date: "2025-12-30", genre: "Action", img: "manok.png", bg: "manok-banner.png", vid: "https://www.youtube.com/embed/dQw4w9WgXcQ", dl: "#" },
+            "mob": { title: "Mob Control", ver: "v2.5.1", date: "2025-12-25", genre: "Arcade", img: "mob.png", bg: "mob-banner.png", vid: "https://www.youtube.com/embed/dQw4w9WgXcQ", dl: "#" },
+            "bowmasters": { title: "Bowmasters", ver: "v5.0.2", date: "2026-01-02", genre: "Action", img: "bow.png", bg: "fr.png", vid: "https://www.youtube.com/embed/dQw4w9WgXcQ", dl: "#" }
+        };
+
+        const id = new URLSearchParams(window.location.search).get('id');
+        const game = gameData[id];
+
+        if(game) {
+            document.getElementById('title').innerText = game.title;
+            
+            // 1. Logo image set vayo (game.img bata)
+            document.getElementById('icon').src = game.img;
+            
+            // 2. Banner image set vayo (game.bg bata)
+            // Yadi 'bg' xaina vane default ma 'img' nai load hunxa
+            const bannerImg = game.bg ? game.bg : game.img;
+            document.getElementById('banner').style.backgroundImage = `linear-gradient(to bottom, transparent, #0d0d0d), url('${bannerImg}')`;
+            document.getElementById('date').innerText = game.date;
+            document.getElementById('version').innerText = game.ver;
+            document.getElementById('genre').innerText = game.genre;
+            document.getElementById('video').src = game.vid;
+            document.getElementById('dl-link').href = game.dl;
+            document.getElementById('page-title').innerText = game.title + " - Details";
+        }
+    </script>
+</body>
+</html>
